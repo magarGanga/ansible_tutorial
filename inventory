@@ -1,2 +1,6 @@
-3.80.123.6
-44.211.135.117
+[web_servers]
+3.80.123.6 apache_package=apache2 php_package=libapache2-mod-php
+#44.211.135.117
+
+[db_servers]
+44.211.135.117 apache_package=apache2 php_package=libapache2-mod-php

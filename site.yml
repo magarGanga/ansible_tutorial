@@ -1,0 +1,65 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (ubuntu)
+    tags: always
+    apt:
+      upgrade: yes
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php
+    tags: apache, apache2, ubunut
+    package:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: copy default html files for site
+    tags: apache,apache2,httpd
+    copy:
+      src: default.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
+
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariabdb
+    tags: db, mariadb, ubuntu
+    apt:
+      name:
+        - mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+
+
+#  - name: install apache2 and php package for Ubuntu
+#    apt:
+#      name:
+#        - apache2
+#        - libapache2-mod-php
+#      state: latest
+#      update_cache: yes
+#    when: ansible_distribution == "Ubuntu"
+
+
+ # - name: add php support for apache
+ #   apt:
+ #     name: libapache2-mod-php
+ #     state: latest
+ #   when: ansible_distribution == "Ubuntu"
