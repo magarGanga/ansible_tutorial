@@ -47,8 +47,32 @@
     when: ansible_distribution == "Ubuntu"
 
 
+- hosts: web_servers
+  become: true
+  tasks:
 
-#  - name: install apache2 and php package for Ubuntu
+  - name: create gmagar user
+    tags: always
+    user:
+      name: gmagar
+      group: root
+
+  - name: add ssh key for gmagar
+    tags: always
+    authorized_key:
+      user: gmagar
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDm1QpHus2nqf8k41pN6xa86V9k/aJlrmHweOGP7E173vu3SZOUvfvaj1rDkGzyHnw5xpQtGe2byfEUiWtGMq5SCow63/jqvd5IYwFEJFPBfwZAaPZldRSFpAHQEf+xpINLb0CdYyz1N8UIURUqjpGsUsRxRrRbXvKCv93FEMUktNPPQLY1ZbQjw272e/+w/zkeVHAxj9s2rvYZntK50iBiKuBU9f8IXTu9qN+f2tJRPfZlvEppqkL7fc4iGr9a6seQ3sZSAdSzcKkGH0+SUklsYdGUgBUkGLs/KvDr1v+fFcX0hRZgsQCUA1PVv7QnE+46qgBPb9ruDU9WGf8HBW5bUv1m93HrHb2/a2pmGa2582K6O2IRgX2tC68gePltYKjs9vzPCcG/RjzvhHJTKODJooigdvV8pfsT2yaUl8fstNsbckefWXzqFHpS/vrUS66wlwpHtzwm1P27ravGfw/0w/UzfnzSSvI7/Er2TCocSXxHEH8Hy/h4Vy0tcJYYb+c= ubuntu@ip-172-31-86-62"
+
+  - name: add sudoers fole for gmagar
+    copy:
+      src: sudoer_gmagar
+      dest: /etc/sudoers.d/gmagar
+      owner: root
+      group: root
+      mode: 0440
+
+
+
 #    apt:
 #      name:
 #        - apache2
@@ -62,4 +86,6 @@
  #   apt:
  #     name: libapache2-mod-php
  #     state: latest
+
+
  #   when: ansible_distribution == "Ubuntu"
